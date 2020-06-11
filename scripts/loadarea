@@ -1,5 +1,10 @@
 #!/usr/bin/env perl
 
+# vim: ft=perl
+
+use strict;
+use warnings;
+
 package mymonster;
 use base 'Games::Roguelike::Mob';
 
@@ -8,7 +13,10 @@ use base 'Games::Roguelike::Item';
 
 package main;
 
-$map = '
+use Games::Roguelike::World;
+use Games::Roguelike::Area;
+
+my $map = '
 ##########
 #k.<+..!.#
 ########.#
@@ -16,30 +24,41 @@ $map = '
 ##########
 ';
 
-%key = (
-        'k'=>{class=>'mymonster', type=>'kobold', name=>'Harvey', hd=>12,
-              items=>['potion of healing',
-                      {class=>'myweapon', name=>'Blue Sword', hd=>9, dd=>4, drain=>1, glow=>1}
-                     ]
-             },
-        '!'=>{lib=>'potion of speed'},
-        'D'=>{lib=>'blue dragon', name=>'Charlie', hp=>209},
-        '+'=>{color=>'blue'}
-       );
+my %key = (
+    'k' => {
+        class => 'mymonster', type => 'kobold', name => 'Harvey', hd => 12,
+        items => [
+            'potion of healing',
+            {   class => 'myweapon', name => 'Blue Sword', hd => 9, dd => 4,
+                drain => 1,          glow => 1
+            }
+        ]
+    },
+    '!' => { lib   => 'potion of speed' },
+    'D' => { lib   => 'blue dragon', name => 'Charlie', hp => 209 },
+    '+' => { color => 'blue' }
+);
 
-%lib = (
-        'potion of speed'=>{class=>'myitem', sym=>'!', type=>'potion', effect=>'speed', power=>1},
-        'potion of healing'=>{class=>'myitem', sym=>'!', type=>'potion', effect=>'heal', power=>1},
-        'blue dragon'=>{class=>'mymonster', sym=>'D', type=>'dragon', breath=>'lightning', hp=>180, hd=>12, at=>[10,5], dm=>[5,10], speed=>5, color=>'cyan'},
-       );
+my %lib = (
+    'potion of speed' => {
+        class => 'myitem', sym => '!', type => 'potion', effect => 'speed',
+        power => 1
+    },
+    'potion of healing' => {
+        class => 'myitem', sym => '!', type => 'potion', effect => 'heal',
+        power => 1
+    },
+    'blue dragon' => {
+        class  => 'mymonster', sym => 'D', type => 'dragon',
+        breath => 'lightning', hp  => 180, hd   => 12, at => [ 10, 5 ],
+        dm => [ 5, 10 ], speed => 5, color => 'cyan'
+    },
+);
 
-use Games::Roguelike::World;
-use Games::Roguelike::Area;
+my $w = Games::Roguelike::World->new;
+my $a = Games::Roguelike::Area->new( world => $w, name => 'level 1' );
 
-$w = new Games::Roguelike::World;
-$a = new Games::Roguelike::Area (world=>$w, name=>'level 1');
-
-$a->load(map=>$map, key=>\%key, lib=>\%lib);
+$a->load( map => $map, key => \%key, lib => \%lib );
 
 $w->area($a);
 
@@ -47,3 +66,18 @@ $w->drawmap();
 
 sleep(2);
 
+__END__
+
+=head1 NAME
+
+loadarea - Example of a predefined map, creatures, and objects
+
+=head1 SYNOPSIS
+
+  $ perl scripts/loadarea
+
+  ##########
+  #k.<+..!.#
+  ########.#
+  #>..D....#
+  ##########
