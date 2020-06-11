@@ -22,6 +22,7 @@ scripts/synop
 scripts/testpov
 scripts/testtag
 scripts/tictactoe
+scripts/wilderness
 t/001_load.t
 t/002_pov.t
 t/003_synop.t
