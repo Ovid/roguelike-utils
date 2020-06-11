@@ -133,21 +133,9 @@ undef $r
 sub newarea {
     my ( $name, $char ) = @_;
     my $level = Games::Roguelike::Area->new( name => $name, world => $r );
+    my $type = $name >= 3 ? 'maze' : $name >= 2 ? 'cavelike' : 'rooms';
 
-    if ( $name >= 3 ) {
-
-        # maze map
-        $level->generate( 'maze', with => [ '<', '>' ] );
-    }
-    elsif ( $name >= 2 ) {
-
-        # cave map
-        $level->generate( 'cavelike', with => [ '<', '>' ] );
-    }
-    else {
-        # room map
-        $level->generate( 'rooms', with => [ '<', '>' ] );
-    }
+    $level->generate( $type, with => [ '<', '>' ] );
 
     ## This works nicely now
     #
@@ -183,6 +171,15 @@ sub newarea {
             power => 4 + randi(2),
         );
     }
+    my $item = myitem->new(
+        $level,
+        sym    => '^',
+        color  => 'red',
+        istack => 0,
+        gstack => 0,
+        name   => 'rubber amulet',
+        power  => 14 + randi(4),
+    );
     return $r->area($level);
 }
 
