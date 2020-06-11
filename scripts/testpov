@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+# vim: ft=perl
+
 use strict;
 use Carp;
 use Games::Roguelike::Utils qw(:all);
