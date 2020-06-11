@@ -1,0 +1,81 @@
+#!/usr/bin/env perl
+
+# vim: ft=perl
+
+use strict;
+use warnings;
+use Games::Roguelike::World;
+
+package My::MOB {
+    use parent 'Games::Roguelike::Mob';
+
+    sub checkmove {
+        my ( $self, $x, $y, $othermob, $testonly ) = @_;
+        my $sym           = $self->{area}{map}->[$x][$y];
+        my %days_to_cross = (
+            'T' => 2,    # tree
+            '"' => 1,    # grass
+            '~' => 3,    # water
+            '^' => 4,    # mountain
+            '*' => 2,    # city,
+        );
+        return $days_to_cross{$sym} || 1;    # default should not happen
+    }
+}
+
+my $world = Games::Roguelike::World->new(
+    w     => 200,
+    h     => 60,
+    dispw => 60,
+    disph => 20,
+);
+my $area  = Games::Roguelike::Area->new(
+    world => $world,
+    name  => 'upland',
+);
+$area->generate(
+    'wilderness',
+    { sym => 'T', color => 'green on black', weight => 2 },
+    { sym => '"', color => 'white on green', weight => 2 },
+    { sym => '~', color => 'white on blue',  weight => 1 },
+    { sym => '^', color => 'black on white', weight => 1 },
+    { sym => '*', color => 'red on black',   city   => 1 },
+    city => 4
+);
+$world->drawmap();
+
+# add a mobile object with symbol '@'
+my $char = My::MOB->new(
+    $world->area,
+    sym => '@',
+    pov => -1,
+    age => 0,
+    hp  => 10,
+    xp  => 0,
+);
+
+# set viewpoint to be from $char's perspective
+$world->setvp($char);
+
+# draw the active area map from the current perspective
+$world->drawmap();
+
+# move until 'q'
+while ( ( my $c = $world->getch() ) ne 'q' ) {
+    my $con = $world->{con};
+    $con->addstr( 1, 64, " -------" );
+    $con->addstr( 2, 64, " HP:  $char->{hp}    " );
+    $con->addstr( 4, 64, " XP:  $char->{xp}    " );
+    $con->addstr( 3, 64, " AGE: $char->{age}    " );
+    $con->addstr( 5, 64, " -------" );
+
+    my $res = $char->kbdmove($c);
+    $char->{age} += $res;
+    $world->drawmap();
+}
+
+__END__
+
+=head1 NAME
+
+wilderness - Generate a wildernness map and navigate across it
