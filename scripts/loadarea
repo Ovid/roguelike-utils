@@ -1,3 +1,5 @@
+#!/usr/bin/env perl
+
 package mymonster;
 use base 'Games::Roguelike::Mob';
 

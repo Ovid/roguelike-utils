@@ -1,3 +1,5 @@
+#!/usr/bin/env perl
+
 package myworld;
 use base 'Games::Roguelike::World';
 

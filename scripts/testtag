@@ -1,3 +1,5 @@
+#!/usr/bin/env perl
+
 use Games::Roguelike::Console;
 
 use Getopt::Long;
