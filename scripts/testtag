@@ -1,9 +1,10 @@
 #!/usr/bin/env perl
 
+# vim: ft=perl
+
 use strict;
 use warnings;
 
-use Games::Roguelike::Console;
 use Getopt::Long;
 
 my $opt_console = $^O =~ /win32/i ? 'win32' : 'curses';
@@ -24,7 +25,26 @@ elsif ( $opt_console eq 'ansi' ) {
     require Games::Roguelike::Console::ANSI;
     $con = Games::Roguelike::Console::ANSI->new();
 }
+else {
+    die "Unknown console: '$opt_console'";
+}
 
-$con->tagstr("This is normal <red>and this is red <green>and this is green");
+$con->tagstr( 3, 4,
+    "This is normal <red>and this is red <green>and this is green" );
 $con->refresh();
 $con->getch();
+
+__END__
+
+=head1 NAME
+
+testtag - Attempt to display text with color codes (see C<tagstr> method)
+
+=head1 SYNOPSIS
+
+  perl scripts/testtag --console curses
+  perl scripts/testtag --console win32
+  perl scripts/testtag --console ansi
+
+If you do not pass the C<--console> option, testtag will attempt to infer your
+console from the C<$^O> (operating system name) variable.
