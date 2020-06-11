@@ -444,3 +444,64 @@ Example, debugging a small map with 3 mobs using an ansi console:
 
 Note: even if the size is large, the random nature of the maps means you may
 still get a small room.
+
+=head1 GAME COMMANDS
+
+While playing, there are several commands you can enter:
+
+=over 4
+
+=item * o
+
+Autoexplore. Find closest unexplored square and move towards it until it's no
+longer unexplored.
+
+=item * g
+
+Get item
+
+=item * i
+
+View inventory. Typing the letter before an item in your inventory
+offers you the change to use, drop, or examine the item.
+
+=item * <
+
+Attempts to go up a level if you're on a C<< < >> symbol. Exits the game if
+you're on the top level.
+
+=item * >
+
+Attempts to go up a level if you're on a C<< > >> symbol.
+
+=item * R
+
+Redraw the map.
+
+=item * S
+
+Save the map
+
+=item * L
+
+Load the map
+
+=item * q
+
+Quit.
+
+=back
+
+Movement is with arrow keys. Alternatively:
+
+=over 4
+
+=item * h - left
+
+=item * j - down
+
+=item * k - up
+
+=item * l - right
+
+=back
