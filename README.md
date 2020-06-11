@@ -49,6 +49,8 @@ Please also see the examples and test scripts located in the "scripts"
 directory included with this distribution.  Some of the examples are fully
 working mini-games.
 
+In particular, `scripts/example` is well-documented and easy to follow.
+
 # AUTHOR
 
 Erik Aronesty <earonesty@cpan.org>
