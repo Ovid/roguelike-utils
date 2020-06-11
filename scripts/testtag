@@ -1,30 +1,30 @@
 #!/usr/bin/env perl
 
-use Games::Roguelike::Console;
+use strict;
+use warnings;
 
+use Games::Roguelike::Console;
 use Getopt::Long;
 
-our $opt_console = $^O =~ /win32/i ? 'win32' : 'curses';
+my $opt_console = $^O =~ /win32/i ? 'win32' : 'curses';
 
-GetOptions("console=s");
+GetOptions( "console=s" => \$opt_console );
 
 my $con;
 
-if ($opt_console eq 'curses') {
-	require Games::Roguelike::Console::Curses;
-	$con = Games::Roguelike::Console::Curses->new();
-} elsif ($opt_console eq 'win32') {
-	require Games::Roguelike::Console::Win32;
-	$con = Games::Roguelike::Console::Win32->new();
-} elsif ($opt_console eq 'ansi') {
-	require Games::Roguelike::Console::ANSI;
-	$con = Games::Roguelike::Console::ANSI->new();
+if ( $opt_console eq 'curses' ) {
+    require Games::Roguelike::Console::Curses;
+    $con = Games::Roguelike::Console::Curses->new();
+}
+elsif ( $opt_console eq 'win32' ) {
+    require Games::Roguelike::Console::Win32;
+    $con = Games::Roguelike::Console::Win32->new();
+}
+elsif ( $opt_console eq 'ansi' ) {
+    require Games::Roguelike::Console::ANSI;
+    $con = Games::Roguelike::Console::ANSI->new();
 }
 
-$con->tagstr("This is normal<red>This is red");
-
+$con->tagstr("This is normal <red>and this is red <green>and this is green");
 $con->refresh();
-
 $con->getch();
-
-undef $con;
