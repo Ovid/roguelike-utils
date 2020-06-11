@@ -27,11 +27,17 @@ $opt_mobs = 0 if $opt_nomobs;
 
 srand( $ARGV[0] ) if $ARGV[0];
 
+my ( $height, $width ) = ( 60, 120 );
+if ( $opt_size eq 'small' ) {
+    $width  = 60;
+    $height = 30;
+}
+
 my $r = Games::Roguelike::World->new(
-    w            => 120,
-    h            => 60,
-    dispw        => 60,
-    disph        => 22,            # to match windows default
+    w            => $width,
+    h            => $height,
+    dispw        => int($width/2),
+    disph        => int($height/2),            # to match windows default
     dispx        => 0,
     dispy        => 3,
     msgh         => 3,
@@ -40,11 +46,6 @@ my $r = Games::Roguelike::World->new(
 );
 
 $r->setdebugmap(1) if $opt_debugmap;
-
-if ( $opt_size eq 'small' ) {
-    $r->{w} = 40;
-    $r->{h} = 20;
-}
 
 if ( $opt_layout == 2 ) {
 
@@ -181,6 +182,7 @@ sub newarea {
         gstack => 0,
         name   => 'rubber amulet',
         power  => 14 + randi(4),
+        xp     => 10,
     );
     return $r->area($level);
 }
@@ -273,7 +275,12 @@ sub doget {
     if (@$items) {
         my @added;
         for (@$items) {
-            push @added, $_ if $char->additem($_);
+            if ( $char->additem($_) ) {
+                    if ( $_->{xp} ) {
+                        $char->{xp} += $_->{xp};
+                    }
+                push @added, $_;
+            }
         }
         my $msg = itemmsgstring( \@added );
         $char->{world}->showmsg("You pick up ${msg}.");
@@ -339,6 +346,10 @@ sub doinv {
                 }
                 elsif ( $c eq 'u' ) {
                     $char->delitem($item);
+                    if ( $item->{name} eq 'healing potion' ) {
+                        $char->{hp} = min( $char->{maxhp},
+                            $char->{hp} + $item->{power} );
+                    }
                     $world->showmsg( "You use the " . $item->{name} );
                 }
                 elsif ( $c eq 'x' ) {
