@@ -69,6 +69,7 @@ my $char = mychar->new(
     maxhp => 10,
     at    => 4,
     pov   => 8,
+    xp    => 0,
 );
 
 $r->setvp($char);
@@ -77,7 +78,8 @@ while (1) {
     $r->{con}->addstr( 1, 64, " -------" );
     $r->{con}->addstr( 2, 64, " HP: $char->{hp}    " );
     $r->{con}->addstr( 3, 64, " AT: $char->{at}    " );
-    $r->{con}->addstr( 4, 64, " -------" );
+    $r->{con}->addstr( 4, 64, " XP: $char->{xp}    " );
+    $r->{con}->addstr( 5, 64, " -------" );
 
     $r->drawmap();
 
