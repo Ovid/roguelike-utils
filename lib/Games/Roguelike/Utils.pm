@@ -11,18 +11,37 @@ use strict;
 
 our $VERSION = '0.4.' . [qw$Revision: 236 $]->[1];
 
-our $DIRN = 8;                                                                   # number of ways to move (don't count ".")
-our @DIRS = ('n','s','e','w','ne','se','nw','sw', '.');                          # names of dirs (zero indexed array)
-our @DD = ([0,-1],[0,1],[1,0],[-1,0],[1,-1],[1,1],[-1,-1],[-1,1],[0,0]);         # map offsets caused by moving in these dirs
-our %DD = ('n'=>[0,-1],'s'=>[0,1],'e'=>[1,0],'w'=>[-1,0],'ne'=>[1,-1],'se'=>[1,1],'nw'=>[-1,-1],'sw'=>[-1,1], '.'=>[0,0]);       # name/to/offset map
-our %DI = ('n'=>0,'s'=>1,'e'=>2,'w'=>3,'ne'=>4,'se'=>5,'nw'=>6,'sw'=>7,'.'=>8);          # name/to/index map
-our @CWDIRS = ('n','ne','e','se','s','sw','w','nw');				 #clockwise directions
+our $DIRN = 8;    # number of ways to move (don't count ".")
+our @DIRS = ( 'n', 's', 'e', 'w', 'ne', 'se', 'nw', 'sw', '.' )
+  ;               # names of dirs (zero indexed array)
+our @DD = (
+    [ 0, -1 ], [ 0, 1 ], [ 1, 0 ], [ -1, 0 ], [ 1, -1 ], [ 1, 1 ],
+    [ -1, -1 ], [ -1, 1 ], [ 0, 0 ]
+);                # map offsets caused by moving in these dirs
+our %DD = (
+    'n'  => [ 0,  -1 ],
+    's'  => [ 0,  1 ],
+    'e'  => [ 1,  0 ],
+    'w'  => [ -1, 0 ],
+    'ne' => [ 1,  -1 ],
+    'se' => [ 1,  1 ],
+    'nw' => [ -1, -1 ],
+    'sw' => [ -1, 1 ],
+    '.'  => [ 0,  0 ],
+);                # name/to/offset map
+our %DI = (
+    'n'  => 0, 's'  => 1, 'e' => 2, 'w' => 3, 'ne' => 4, 'se' => 5,
+    'nw' => 6, 'sw' => 7, '.' => 8
+);                # name/to/index map
+our @CWDIRS
+  = ( 'n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw' );    #clockwise directions
 
 BEGIN {
-	require Exporter;
-	*{import} = \&Exporter::import;
-	our @EXPORT_OK = qw(min max ardel rarr distance randsort intify randi $DIRN @DD %DD %DI @DIRS @CWDIRS round rpad);
-	our %EXPORT_TAGS = (all=>\@EXPORT_OK);
+    require Exporter;
+    *{import} = \&Exporter::import;
+    our @EXPORT_OK
+      = qw(min max ardel rarr distance randsort intify randi $DIRN @DD %DD %DI @DIRS @CWDIRS round rpad);
+    our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 }
 
 use Games::Roguelike::Area;
@@ -30,71 +49,73 @@ use Games::Roguelike::Area;
 # try to load C version for speed
 eval 'use Games::Roguelike::Utils::Pov_C';
 
-if (!defined(&distance)) {
-	eval('
+if ( !defined(&distance) ) {
+    eval( '
         sub distance {
                 return sqrt(($_[0]-$_[2])*($_[0]-$_[2])+($_[1]-$_[3])*($_[1]-$_[3]));
         }
-	');
+	' );
 }
 
 sub intify {
-        for (@_) {
-                $_=int($_);
-        }
+    for (@_) {
+        $_ = int($_);
+    }
 }
 
 sub randsort {
-        my @a = @_;
-        my @d;
-        while (@a) {
-                push @d, splice(@a, rand()*scalar(@a), 1);
-        }
-        return @d;
+    my @a = @_;
+    my @d;
+    while (@a) {
+        push @d, splice( @a, rand() * scalar(@a), 1 );
+    }
+    return @d;
 }
 
 sub round {
-	return int($_[0]+0.5);
+    return int( $_[0] + 0.5 );
 }
 
 sub randi {
-	my ($a, $b) = @_;
-	if ($b) {
-		# rand num between a and b, inclusive
-		return $a+int(rand()*($b-$a+1));
-	} else {
-		# rand num between 0 and a-1
-		return int(rand()*$a);
-	}
+    my ( $a, $b ) = @_;
+    if ($b) {
+
+        # rand num between a and b, inclusive
+        return $a + int( rand() * ( $b - $a + 1 ) );
+    }
+    else {
+        # rand num between 0 and a-1
+        return int( rand() * $a );
+    }
 }
 
 sub ardel {
-	my ($ar, $t) = @_;
-	for (my $i=0;$i<=$#{$ar};++$i) {
-		splice(@{$ar},$i,1) if $ar->[$i] eq $t;
-	}
+    my ( $ar, $t ) = @_;
+    for ( my $i = 0; $i <= $#{$ar}; ++$i ) {
+        splice( @{$ar}, $i, 1 ) if $ar->[$i] eq $t;
+    }
 }
 
 sub max {
-	my ($a, $b) = @_;
-	return $a >= $b ? $a : $b;
+    my ( $a, $b ) = @_;
+    return $a >= $b ? $a : $b;
 }
 
 sub min {
-	my ($a, $b) = @_;
-	return $a <= $b ? $a : $b;
+    my ( $a, $b ) = @_;
+    return $a <= $b ? $a : $b;
 }
 
 sub rarr {
-	my ($arr) = @_;
-	return $arr->[$#{$arr}*rand()];
+    my ($arr) = @_;
+    return $arr->[ $#{$arr} * rand() ];
 }
 
 sub rpad {
-	my ($str, $len, $char) = @_;
-	$char = ' ' if $char eq '';
-	$str .= $char x ($len - length($str));
-	return $str;
+    my ( $str, $len, $char ) = @_;
+    $char = ' ' if $char eq '';
+    $str .= $char x ( $len - length($str) );
+    return $str;
 }
 
 =head1 NAME
