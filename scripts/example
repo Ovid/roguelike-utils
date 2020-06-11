@@ -8,16 +8,21 @@ use Games::Roguelike::World;
 use Games::Roguelike::Console;
 use Getopt::Long;
 
-our $opt_console  = '';
-our $opt_debugmap = 0;
-our $opt_layout   = 1;
-our $opt_mobs     = 5;
-our $opt_nomobs   = 0;
-our $opt_size     = 'large';
+my $opt_console  = '';    # console type: win32, ansi, curses
+my $opt_debugmap = 0;     # turns on display of map coordinates
+my $opt_layout   = 1;     # 1 or 2. 1 is default, 2 puts message box at bottom
+my $opt_mobs     = 5;     # number of mobs to face. Default is 5
+my $opt_nomobs   = 0;     # removes mobs
+my $opt_size = 'large';   # map size, small or large. Default is 'large'
 
-GetOptions( "mobs=i", "console=s", "debugmap", "layout=i", "size=s",
-    "nomobs" )
-  || die;
+GetOptions(
+    "mobs=i"    => \$opt_mobs,
+    "console=s" => \$opt_console,
+    "debugmap"  => \$opt_debugmap,
+    "layout=i"  => \$opt_layout,
+    "size=s"    => \$opt_size,
+    "nomobs"    => \$opt_nomobs,
+) || die "bad options";
 $opt_mobs = 0 if $opt_nomobs;
 
 srand( $ARGV[0] ) if $ARGV[0];
@@ -113,6 +118,7 @@ while (1) {
                 last;
             }
             else {
+                undef $c;
                 $r->showmsg("Nevermind.");
             }
         }
@@ -411,3 +417,31 @@ sub checkmove {
 package myitem;
 use Games::Roguelike::Utils qw(:all);
 use base 'Games::Roguelike::Item';
+
+__END__
+
+=head1 NAME
+
+example - example roguelike dungeon
+
+=head1 SYNOPSIS
+
+  perl scripts/example
+
+=head1 OPTIONS
+
+  NAME      ARG                      MEANING
+  ------------------------------------------
+  console   win32, ansi, curses      Not required. By default will attempt to guess
+  debugmap                           Turns on display of map coordinates (default false)
+  layout    1 or 2                   1 is default, 2 puts message box at bottom
+  mobs      integer                  Number of mobs to face. Default is 5
+  nomobs                             Removes mobs
+  size      small or large           Map size, small or large. Default is 'large'
+
+Example, debugging a small map with 3 mobs using an ansi console:
+
+  perl scripts/example --debugmap --mobs 3 --console ansi
+
+Note: even if the size is large, the random nature of the maps means you may
+still get a small room.
