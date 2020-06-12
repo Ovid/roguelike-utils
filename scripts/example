@@ -383,17 +383,17 @@ package mychar {
         my $items = $char->{items};
         my $world = $char->{world};
         $world->dispclear();
-        $world->dispstr("<bold white>--- Inventory: ");
-        $world->dispstr("<bold white>| ");
+        $world->dispstr("--- Inventory: ");
+        $world->dispstr("| ");
         my $icnt = 0;
         for (@$items) {
             my $letter = chr( ord('a') + ( $icnt++ ) );
-            $world->dispstr( "<bold white>| "
+            $world->dispstr( "| "
                   . $letter . ") <"
                   . $_->{color} . ">"
                   . $_->{name} );
         }
-        $world->dispstr("<bold white>---");
+        $world->dispstr("---");
         $world->{con}->refresh();
         return $icnt;
     }
