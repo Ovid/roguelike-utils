@@ -4,7 +4,7 @@ Games::Roguelike - Roguelike library for Perl
 
 # VERSION
 
-version 0.6.0
+version 0.6.1
 
 # SYNOPSIS
 

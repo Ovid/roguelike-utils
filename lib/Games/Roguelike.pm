@@ -60,19 +60,6 @@ working mini-games.
 
 In particular, F<scripts/example> is well-documented and easy to follow.
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty <earonesty@cpan.org>
-
-=head1 MAINTAINER
-
-Curtis "Ovid" Poe <ovid@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE
-file.
-

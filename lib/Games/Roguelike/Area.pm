@@ -2018,16 +2018,9 @@ sub generate {
 
 L<Games::Roguelike::World>, L<Games::Roguelike::Mob>, L<Games::Roguelike::Console>
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 
