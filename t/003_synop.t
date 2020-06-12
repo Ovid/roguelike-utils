@@ -56,7 +56,8 @@ sub testsynop {
 	$synop .= "\n1;";
 
 	$ok = eval($synop);
+  my $error = $@ || 'no error';
 
-	ok($ok, "$mod synopsis");
+	ok($ok, "$mod synopsis ($error)") or diag $error;
 }
 
