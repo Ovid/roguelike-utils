@@ -2,6 +2,7 @@ Revision history for Games-Roguelike
  
 {{$NEXT}}
   - Break areas out into their own packages
+  - Don't break inventory in ANSI mode for scripts/example
 
 0.6.0     2020-06-12 08:52:51+02:00 Europe/Paris 
   - Updated to Dist::Zilla
