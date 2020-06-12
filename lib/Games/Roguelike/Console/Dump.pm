@@ -1,22 +1,22 @@
 package Games::Roguelike::Console::Dump;
 
-=head1 NAME
-
-Games::Roguelike::Console::Dump - fake console that dumps to file, for testing
+# ABSTRACT: fake console that dumps to file, for testing
 
 =head1 SYNOPSIS
 
-use Games::Roguelike::Console::Dump;
+  use Games::Roguelike::Console::Dump;
 
-$con = Games::Roguelike::Console::Dump->new(keys=>'qY', file=>'/dev/null');
+  my $con = Games::Roguelike::Console::Dump->new(keys=>'qY', file=>'/dev/null');
 
 =head1 DESCRIPTION
 
-Fake console that dumps screens to file, used for testing game scripts without needing "curses" support.
+Fake console that dumps screens to file, used for testing game scripts without
+needing "curses" support.
 
 Notably, the new function takes a keystroke string and a file as arguments.
 
-Inherits from Games::Roguelike::Console.  See Games::Roguelike::Console for list of methods.
+Inherits from Games::Roguelike::Console.  See Games::Roguelike::Console for
+list of methods.
 
 =head1 SEE ALSO
 
@@ -29,8 +29,6 @@ use IO::File;
 use Carp qw(cluck croak);
 use Games::Roguelike::Utils qw(:DEFAULT);
 use base 'Games::Roguelike::Console';
-
-our $VERSION = '0.4.' . [qw$Revision: 233 $]->[1];
 
 sub new {
     my $pkg = shift;

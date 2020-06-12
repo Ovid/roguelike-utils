@@ -7,34 +7,53 @@ package Games::Roguelike::World;
 #     assume some roguelike concepts (mobs/items)
 #     allow someone to make 7-day rl's in 7-days
 
-=head1 NAME
-
-Games::Roguelike::World - Roguelike World
+# ABSTRACT: Roguelike World
 
 =head1 SYNOPSIS
 
- package myWorld;
- use base 'Games::Roguelike::World';
+  package myworld;
+  use base 'Games::Roguelike::World';
 
- $r = myWorld->new(w=>80,h=>50,dispw=>40,disph=>18);     # creates a world with specified width/height & map display width/height
- $r->area(new Games::Roguelike::Area(name=>'1'));			# create a new area in this world called "1"
- $r->area->genmaze2();                                   # make a cavelike maze
- $char = Games::Roguelike::Mob->new($r->area, sym=>'@', pov=>8);      # add a mobile object with symbol '@'
- $r->setvp($char);                                       # set viewpoint to be from $char's perspective
- $r->drawmap();                                          # draw the active area map from the current perspective
- while (!((my $c = $r->getch()) eq 'q')) {
-        $char->kbdmove($c);
-        $r->drawmap();
- }
+  # creates a world with specified width/height & map display width/height
+  my $world = myworld->new( w => 80, h => 50, dispw => 40, disph => 18 );
+
+  # create a new area in this world called "1"
+  $world->area( Games::Roguelike::Area::Maze->new( name => '1' ) );
+
+  # make a cavelike maze
+  $world->area->generate();
+
+  # add a mobile object with symbol '@'
+  my $char = Games::Roguelike::Mob->new( $world->area, sym => '@', pov => 8 );
+
+  # set viewpoint to be from $char's perspective
+  $world->setvp($char);
+
+  # draw the active area map from the current perspective
+  $world->drawmap();
+
+  # move until 'q'
+  while ( !( ( my $c = $world->getch() ) eq 'q' ) ) {
+      $char->kbdmove($c);
+      $world->drawmap();
+  }
 
 =head1 DESCRIPTION
 
-General pupose object which pulls together field of view, item, mob handling and map drawing code.   
+General pupose object which pulls together field of view, item, mob handling
+and map drawing code.   
 
-	* contains a hash of Games::Roguelike::Area's for each "level" or "region" in the game
-	* uses the Games::Roguelike::Console library to draw the current area
-	* assumes the user will be using overridden Games::Roguelike::Mob's as characters in the game
-	* assumes the user will be using overridden Games::Roguelike::Item's as items in the game
+=over 4
+
+=item * contains a hash of Games::Roguelike::Area's for each "level" or "region" in the game
+
+=item * uses the Games::Roguelike::Console library to draw the current area
+
+=item * assumes the user will be using overridden Games::Roguelike::Mob's as characters in the game
+
+=item * assumes the user will be using overridden Games::Roguelike::Item's as items in the game
+
+=back
 
 =head2 METHODS
 
@@ -48,32 +67,34 @@ use Games::Roguelike::Console;
 use Games::Roguelike::Mob;
 
 use Math::Trig;
-use Data::Dumper;
 use Carp qw(croak confess carp);
 
 our $AUTOLOAD;
-our $VERSION = '0.4.' . [qw$Revision: 256 $]->[1];
 
 =item new(OPT1=>VAL1, OPT2=>VAL2...)
-	
+    
 Options can also all be set/get as class accessors:
 
-	vp => undef			# Games::Roguelike::Mob that is the 'viewpoint'
-	dispx, dispy => (0,1) 		# x/y location, of the map
-	dispw, disph => (60,24) 	# width & height of the map
-	msgx, msgy => (0,0) 		# x/y location of the "scrolling message box"
-	msgw, msgh => (60, 1)		# width & height of the "scrolling message box"
-	maxlog => 80, 			# maximum number of rows stored message log
-	msgoldcolor => 'gray', 		# color of non-curent messages (if left blank, color is left alone)
-	wsym => '#', 			# default wall symbol
-	fsym => '.', 			# default floor symbol
-	dsym => '+', 			# default door symbol
-	debugmap => 0, 			# turn on map coordinate display
-	debug => 0, 			# debug level (higher = more)
-	noview => '#+', 		# list of symbols that block view
-	nomove => '#', 			# list of symbols that block movement	
-	area => undef,			# Games::Roguelike::Area that contains the currrent map
-	
+    vp          => undef   # Games::Roguelike::Mob that is the 'viewpoint'
+    x           => 60,     # width of the map
+    y           => 40m     # height of the map
+    dispw       => 40      # display width of the map
+    disph       => 24      # display height of the map
+    msgx        => 0       # x location of the "scrolling message box"
+    msgy        => 0       # y location of the "scrolling message box"
+    msgw        => 60      # width of the "scrolling message box"
+    msgh        => 4       # height of the "scrolling message box"
+    maxlog      => 80,     # maximum number of rows stored message log
+    msgoldcolor => 'gray', # color of non-curent messages (if left blank, color is left alone)
+    wsym        => '#',    # default wall symbol
+    fsym        => '.',    # default floor symbol
+    dsym        => '+',    # default door symbol
+    debugmap    => 0,      # turn on map coordinate display
+    debug       => 0,      # debug level (higher = more)
+    noview      => '#+',   # list of symbols that block view
+    nomove      => '#',    # list of symbols that block movement
+    area        => undef,  # Games::Roguelike::Area that contains the currrent map
+    
 None of these features have to be used, and can be easily ignored or overridden.
 
 =cut
@@ -135,8 +156,8 @@ No arguments: returns the current area
 
 Specify a scalar name: returns an area with that name
 
-Specify an Games::Roguelike::Area object: stores that object in the area hash, 
-	overwriting any with the same name, then makes it the active area
+Specify an Games::Roguelike::Area object: stores that object in the area hash,
+overwriting any with the same name, then makes it the active area
 
 =cut
 
@@ -545,16 +566,9 @@ sub load {
 
 L<Games::Roguelike::Area>, L<Games::Roguelike::Mob>, L<Games::Roguelike::Console>
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 

@@ -6,9 +6,7 @@ use strict;
 use Carp;
 use Games::Roguelike::Utils qw(:all);
 
-=head1 NAME
-
- Games::Roguelike::Area::Wilderness
+# ABSTRACT: Roguelike wilderness areas
 
 =head1 SYNOPSIS
 

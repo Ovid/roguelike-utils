@@ -2,14 +2,12 @@ use strict;
 
 package Games::Roguelike::Console::Win32;
 
-#### refer to Games::Roguelike::Console for docs ###
+# ABSTRACT: Win32 support for Games::Roguelike::Console
 
 use Win32::Console;
 use Carp;
 
 use base 'Games::Roguelike::Console';
-
-our $VERSION = '0.4.' . [qw$Revision: 247 $]->[1];
 
 sub new {
     my $pkg = shift;

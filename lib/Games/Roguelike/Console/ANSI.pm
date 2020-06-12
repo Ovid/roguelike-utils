@@ -1,8 +1,6 @@
 package Games::Roguelike::Console::ANSI;
 
-=head1 NAME
-
-Games::Roguelike::Console::ANSI - socket-friendly, object oriented curses-like support for an ansi screen buffer
+# ABSTRACT: socket-friendly, object oriented curses-like support for an ansi screen buffer
 
 =head1 SYNOPSIS
 
@@ -27,16 +25,9 @@ Uses Term::ANSIColor for colors.
 
 L<Games::Roguelike::Console>
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 
@@ -48,8 +39,6 @@ use POSIX;
 use Carp qw(confess croak);
 
 use base 'Games::Roguelike::Console';
-
-our $VERSION = '0.4.' . [qw$Revision: 258 $]->[1];
 
 our $KEY_ESCAPE = chr(27);
 our $KEY_NOOP   = chr(241);

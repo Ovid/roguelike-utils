@@ -8,17 +8,19 @@ use Games::Roguelike::World;
 use Games::Roguelike::Console;
 use Getopt::Long;
 
-my $opt_console  = '';    # console type: win32, ansi, curses
-my $opt_debugmap = 0;     # turns on display of map coordinates
-my $opt_layout   = 1;     # 1 or 2. 1 is default, 2 puts message box at bottom
-my $opt_mobs     = 5;     # number of mobs to face. Default is 5
-my $opt_nomobs   = 0;     # removes mobs
-my $opt_size = 'large';   # map size, small or large. Default is 'large'
+my $opt_console  = 'ansi';    # console type: win32, ansi, curses
+my $opt_debugmap = 0;         # turns on display of map coordinates
+my $opt_debug    = 0;         # turns on debugging of input commands
+my $opt_layout = 1;       # 1 or 2. 1 is default, 2 puts message box at bottom
+my $opt_mobs   = 5;       # number of mobs to face. Default is 5
+my $opt_nomobs = 0;       # removes mobs
+my $opt_size   = 'large'; # map size, small or large. Default is 'large'
 
 GetOptions(
     "mobs=i"    => \$opt_mobs,
     "console=s" => \$opt_console,
     "debugmap"  => \$opt_debugmap,
+    "debug"     => \$opt_debug,
     "layout=i"  => \$opt_layout,
     "size=s"    => \$opt_size,
     "nomobs"    => \$opt_nomobs,
@@ -34,14 +36,17 @@ if ( $opt_size eq 'small' ) {
 }
 
 my $world = Games::Roguelike::World->new(
-    w            => $width,
-    h            => $height,
-    dispw        => int( $width / 2 ),
-    disph        => int( $height / 2 ),    # to match windows default
-    dispx        => 0,
-    dispy        => 3,
-    msgh         => 3,
-    debug        => 1,
+    w     => $width,
+    h     => $height,
+    dispw => int( $width / 2 ),
+    disph => int( $height / 2 ),   # to match windows default
+    dispx => 0,
+    dispy => 3,
+    msgx  => 0,                    # x location of the "scrolling message box"
+    msgy  => 0,                    # y location of the "scrolling message box"
+    msgw  => 60,                   # width of the "scrolling message box"
+    msgh  => 4,                    # height of the "scrolling message box"
+    debug => $opt_debug,
     console_type => $opt_console
 );
 
@@ -448,7 +453,8 @@ example - example roguelike dungeon
 
   NAME      ARG                      MEANING
   ------------------------------------------
-  console   win32, ansi, curses      Not required. By default will attempt to guess
+  console   win32, ansi, curses      Not required (default: ansi)
+  debug                              Turns on display of input debugging (default false)
   debugmap                           Turns on display of map coordinates (default false)
   layout    1 or 2                   1 is default, 2 puts message box at bottom
   mobs      integer                  Number of mobs to face. Default is 5

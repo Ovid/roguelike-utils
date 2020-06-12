@@ -11,7 +11,7 @@ use IO::Socket;
 use IO::Select;
 use IO::File qw();    # this prevents warnings on win32
 
-our $VERSION = '0.4.' . [qw$Revision: 253 $]->[1];
+# ABSTRACT: Roguelike game telnet daemon
 
 use Time::HiRes qw(time);
 
@@ -22,13 +22,9 @@ use base 'Games::Roguelike::World';
 #     multi-user telnet daemon
 #     finite-state processor, allows for single-thread engine
 
-=head1 NAME
-
-Games::Roguelike::World::Daemon - roguelike game telnet daemon
-
 =head1 SYNOPSIS
 
- # for an extended example with move overrides, see the scripts/netgame included
+For an extended example with move overrides, see the scripts/netgame included
 
  use strict;
 
@@ -158,10 +154,10 @@ sub DESTROY {
 
 Look for waiting input and calls:
 
-	newconn() - for new conneciton
-	readinput() - when input is available
-	tick() - to process per-turn moves
-	drawallmaps() - to render all the maps	
+    newconn() - for new conneciton
+    readinput() - when input is available
+    tick() - to process per-turn moves
+    drawallmaps() - to render all the maps    
 
 When those functions are called the class {vp} and {state} variables are 
 set to the connection's "viewpoint" (character) and "state".
@@ -183,9 +179,10 @@ sub proc {
 
     #    $self->log("rem", $rem);
 
-    my ( $new_readable, $new_writable, $new_error )
-      = IO::Select->select( $self->{read_set}, $self->{write_set},
-        $self->{read_set}, $rem + .01 );
+    my ( $new_readable, $new_writable, $new_error ) = IO::Select->select(
+        $self->{read_set}, $self->{write_set},
+        $self->{read_set}, $rem + .01
+    );
 
     foreach my $sock (@$new_readable) {
         if ( $sock == $self->{main_sock} ) {
@@ -211,8 +208,10 @@ sub proc {
                 }
                 $self->{read_set}->add($new_sock);
                 *$new_sock{HASH}->{con}
-                  = new Games::Roguelike::Console::ANSI( in => $new_sock,
-                    out => $new_sock, @opts );
+                  = new Games::Roguelike::Console::ANSI(
+                    in  => $new_sock,
+                    out => $new_sock, @opts
+                  );
                 *$new_sock{HASH}->{time} = time();
                 *$new_sock{HASH}->{errc} = 0;
                 $self->{con}             = *$new_sock{HASH}->{con};
@@ -420,7 +419,7 @@ sub dprint {
 # for now, the way we report back state changes is to modify
 #
 #   $self->{state}
-#   $self->{vp} 	# for creating/loading/switching to a character's viewpoint
+#   $self->{vp}     # for creating/loading/switching to a character's viewpoint
 #
 # these are then linked to the socket
 #
@@ -539,16 +538,9 @@ Currently this fails on Win32
 
 L<Games::Roguelike::World>
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 

@@ -1,12 +1,11 @@
-# NAME
+package Games::Roguelike;
 
-Games::Roguelike - Roguelike library for Perl
+use strict;
+# ABSTRACT: Roguelike library for Perl
 
-# VERSION
+__END__
 
-version 0.6.1
-
-# SYNOPSIS
+=head1 SYNOPSIS
 
     package My::World {
       use parent 'Games::Roguelike::World';
@@ -40,32 +39,27 @@ version 0.6.1
         $world->drawmap();
     }
 
-# DESCRIPTION
+=head1 DESCRIPTION
 
 Library for pulling together field of view, character handling and map drawing
 code.
 
-- ::World is the main "world" object
-- uses the ::Console library to draw the map
-- assumes the user will be using overridden ::Mob's as characters in the game
+=over 4
 
-Please also see the examples and test scripts located in the `scripts`
+=item * ::World is the main "world" object
+
+=item * uses the ::Console library to draw the map
+
+=item * assumes the user will be using overridden ::Mob's as characters in the game
+
+=back
+
+Please also see the examples and test scripts located in the C<scripts>
 directory included with this distribution.  Some of the examples are fully
 working mini-games.
 
-In particular, `scripts/example` is well-documented and easy to follow.
+In particular, F<scripts/example> is well-documented and easy to follow.
 
-# ORIGINAL AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty <earonesty@cpan.org>
-
-# AUTHOR
-
-Curtis "Ovid" Poe <ovid@cpan.org>
-
-# COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2020 by Curtis "Ovid" Poe.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.

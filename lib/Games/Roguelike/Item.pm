@@ -7,11 +7,9 @@ use Games::Roguelike::Console;
 use Games::Roguelike::Area;
 use Carp qw(croak confess carp);
 
+# ABSTRACT: Roguelike item object
+
 our $AUTOLOAD;
-
-=head1 NAME
-
-Games::Roguelike::Item - Roguelike item object
 
 =head1 SYNOPSIS
 

@@ -1,15 +1,15 @@
 package Games::Roguelike::Utils::Pov_C;
 
-# broken undil perl 5.8
+# broken until perl 5.8
 # use Exporter qw(import);
 
+# ABSTRACT: Optional C backend for fast roguelike utils
+
 BEGIN {
-        require Exporter;
-        *{import} = \&Exporter::import;
+    require Exporter;
+    *{import} = \&Exporter::import;
     our @EXPORT = qw(checkpov_c distance findclose_c);
 }
-
-our $VERSION = '0.4.' . [qw$Revision: 236 $]->[1];
 
 use Inline C => <<'END_C';
 

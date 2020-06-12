@@ -1,5 +1,7 @@
 package Games::Roguelike::Area;
 
+# ABSTRACT: Roguelike area map
+
 # puposely don't use much of the curses windowing stuff since curses doesn't port well
 # purpose of library:
 #
@@ -8,27 +10,28 @@ package Games::Roguelike::Area;
 #     assume some roguelike concepts (mobs/items)
 #     allow me to make 7-day rl's in 7-days
 
-=head1 NAME
-
-Games::Roguelike::Area - Roguelike area map
-
 =head1 SYNOPSIS
 
  package myArea;
  use base 'Games::Roguelike::Area';
 
- $a = myArea->new(w=>80,h=>50);                     # creates an area with specified width/height
- $a->generate('cavelike');                                             # make a cavelike maze
- $char = Games::Roguelike::Mob->new($a, sym=>'@');              # add a mobile object with symbol '@'
+ my $area = myArea->new(w=>80,h=>50);                 # creates an area with specified width/height
+ $area->generate('cavelike');                         # make a cavelike maze
+ my $char = Games::Roguelike::Mob->new($a, sym=>'@'); # add a mobile object with symbol '@'
 
 =head1 DESCRIPTION
 
 Library for loading or generating mazes, managing items/mobs
 
-    * assumes the user will be using overridden Games::Roguelike::Mob's as characters in the game
-    * provides a flexible load() function
-    * contains an array of 'features', which can be named, searched for and positioned
+=over 4
 
+=item * assumes the user will be using overridden Games::Roguelike::Mob's as characters in the game
+
+=item * provides a flexible load() function
+
+=item * contains an array of 'features', which can be named, searched for and positioned
+
+=back
 =head2 METHODS
 
 =over 4
@@ -38,14 +41,14 @@ Library for loading or generating mazes, managing items/mobs
 use strict;
 use Games::Roguelike::Utils qw(:all);
 use Games::Roguelike::Mob;
+use Games::Roguelike::Area::Rooms;
+use Games::Roguelike::Area::Cavelike;
+use Games::Roguelike::Area::Maze;
 
-use Data::Dumper;
 use Carp qw(croak confess carp);
 
 our $OKINLINEPOV;
 our $AUTOLOAD;
-
-our $VERSION = '0.5.' . [qw$Revision: 259 $]->[1];
 
 BEGIN {
     eval('use Games::Roguelike::Utils::Pov_C;');
@@ -56,28 +59,29 @@ BEGIN {
     
 Options can also all be set/get as class accessors:
 
-    world => undef,            # world this area belongs to (optional container which can "addarea")
-    name => '',             # name of this level/area (required if world is specified)
-    map => []             # double-indexed array of map symbols 
-    color => []            # double-indexed array of strings (used to color map symbols)
-    mobs => [],            # list of mobs
-    items => [],            # list of items
+    world => undef, # world this area belongs to (optional container which can "addarea")
+    name  => '',    # name of this level/area (required if world is specified)
+    map   => []     # double-indexed array of map symbols
+    color => []     # double-indexed array of strings (used to color map symbols)
+    mobs  => [],    # list of mobs
+    items => [],    # list of items
 
- # These will default to the world defaults, if world is set
+These will default to the world defaults, if world is set
 
-        w=>80, h=>40,            # width/height of this area
-        debugmap => 0,             # turn on map coordinate display
-    memcolor => 'gray',        # color drawn when an area is not in sight
+    w        => 80,     # width of this area
+    h        => 40,     # height of this area
+    debugmap => 0,      # turn on map coordinate display
+    memcolor => 'gray', # color drawn when an area is not in sight
 
- # These vars, or the world defaults (if a world is defined)
- # are used by map-making, pathfinding and field-of view, rather than using hooks
- # specifically because function calling seems to slow things down
+These vars, or the world defaults (if a world is defined) are used by
+map-making, pathfinding and field-of view, rather than using hooks
+specifically because function calling seems to slow things down
 
-        wsym => '#',             # default wall symbol
-        fsym => '.',             # default floor symbol
-        dsym => '+',             # default door symbol
-        noview => '#+',         # list of symbols that block view
-        nomove => '#',             # list of symbols that block movement    
+    wsym   => '#',      # default wall symbol
+    fsym   => '.',      # default floor symbol
+    dsym   => '+',      # default door symbol
+    noview => '#+',     # list of symbols that block view
+    nomove => '#',      # list of symbols that block movement
     
 =cut
 
@@ -288,7 +292,7 @@ sub rpoint_empty {
     }
 }
 
-############ part of genmaze1 ############
+############ part of generate ############
 
 sub genroom {
 
@@ -978,238 +982,6 @@ sub diginbound {
       && ( $_[0] < ( $self->{w} - 2 ) )
       && ( $_[1] > 0 )
       && ( $_[1] < ( $self->{h} - 2 ) );
-}
-
-sub genmaze2 {
-    my $self = shift;
-    my %opts = @_;
-
-    my ( $m, $fx, $fy );
-
-    my $digc = 0;
-
-    do {
-        my ( $cx, $cy ) = $self->rpoint();
-        $self->digone( $cx, $cy );
-        if ( my $feature = shift @{ $opts{with} } ) {
-            $self->{map}->[$cx][$cy] = $feature;
-            push @{ $self->{f} }, [ $cx, $cy, 'FEATURE' ];
-        }
-        else {
-            push @{ $self->{f} }, [ $cx, $cy, 'ROOM' ];
-        }
-        my @v;
-        $v[$cx][$cy] = 1;
-        my $dug = 0;
-        do {
-            my $o = randi(4);
-            $dug = 0;
-            for ( my $i = 0; $i < 4; ++$i ) {
-                my ( $tx, $ty )
-                  = ( $cx + $DD[ ( $i + $o ) % 4 ]->[0],
-                    $cy + $DD[ ( $i + $o ) % 4 ]->[1] );
-                if ( ( !$v[$tx][$ty] ) && $self->diginbound( $tx, $ty ) ) {
-                    ( $cx, $cy ) = ( $tx, $ty );
-                    ++$digc if $self->digone( $cx, $cy );
-
-                    #print "dig at $cx, $cy $v[$cx][$cy]\n";
-                    $v[$cx][$cy] = 1;
-                    $dug = 1;
-                    last;
-                }
-            }
-        } while ($dug);
-
-    } while ( $digc < ( ( $self->{w} * $self->{h} ) / 8 ) );
-
-    # dig out paths
-    my ( $px, $py );
-    for ( randsort( @{ $self->{f} } ) ) {
-        my ( $x, $y, $reason ) = @{$_};
-        if ($px) {
-            if ( !$self->findpath( $x, $y, $px, $py ) ) {
-                $self->makepath( $x, $y, $px, $py );
-
-                #$self->drawmap();
-                #$self->getch();
-            }
-        }
-        ( $px, $py ) = ( $x, $y );
-    }
-}
-
-=item generate ('rooms', [with=>[sym1[,sym2...]])
-
-Makes a random nethack-style map with a bunch of rectangle rooms connected by corridors
-
-If you specify a "with" list, it puts those symbols on the map in random rooms, and calls "addfeature" on them.
-
-=cut
-
-sub genmaze1 {
-    my $self = shift;
-    my %opts = @_;
-
-    my ( $m, $fx, $fy );
-
-    my $rooms = 0;
-
-    for my $feature ( @{ $opts{with} } ) {
-        ( $fx, $fy ) = $self->rpoint_empty();
-        $self->{map}->[$fx][$fy] = $feature;
-        push @{ $self->{f} }, [ $fx, $fy, 'FEATURE' ];
-        ++$rooms if $self->genroom( $fx, $fy );    # put rooms around features
-    }
-
-    # some extra rooms
-    while ( $rooms < ( $self->{w} * $self->{h} / 600 ) ) {
-        ++$rooms
-          if $self->genroom( ( $fx, $fy ) = $self->rpoint_empty(),
-            nooverlap => 1 );
-    }
-
-    # dig out paths
-    my ( $px, $py );
-    for ( randsort( @{ $self->{f} } ) ) {
-        my ( $x, $y, $reason ) = @{$_};
-        if ($px) {
-            if ( !$self->findpath( $x, $y, $px, $py ) ) {
-                $self->makepath( $x, $y, $px, $py );
-                if ( !$self->findpath( $x, $y, $px, $py ) ) {
-                    $self->{map}->[$px][$py] = '1';
-                    $self->{map}->[$x][$y]   = '2';
-                    $self->dump();
-                    die "makepath failed!!!\n";
-                    $self->makepath( $x, $y, $px, $py );
-                }
-
-                #$self->drawmap();
-            }
-        }
-        ( $px, $py ) = ( $x, $y );
-    }
-}
-
-=item generate('maze', rand=>number, with=>feature-list) 
-
-Generate a tight, difficult maze.  Rand defaults to 5 (higher numbers are less random).
-
-=cut
-
-sub genmaze3 {
-    my $self = shift;
-    my %opts = @_;
-
-    $opts{w} = $self->{w} if !$opts{w};
-    $opts{h} = $self->{h} if !$opts{h};
-
-    my ( $cNx, $cNy, $cSx, $cSy );
-    my $intDir;
-    my $intDone = 0;
-
-    my $blnBlocked;
-
-    use constant X => 0;
-    use constant Y => 1;
-
-    $opts{rand} = 5 if !$opts{rand};
-
-    $opts{w} -= 1 if !( $opts{w} % 2 );
-    $opts{h} -= 1 if !( $opts{h} % 2 );
-
-    # stores the directions that corridors go in
-    my @cDir;
-    my @blnMaze;
-
-    do {
-        # this code is used to make sure the numbers are odd
-        $cSx = 1 + ( int( ( ( $opts{w} - 1 ) * rand() ) / 2 ) * 2 );
-        $cSy = 1 + ( int( ( ( $opts{h} - 1 ) * rand() ) / 2 ) * 2 );
-
-        # first opening is free!
-        $blnMaze[$cSx][$cSy] = 1 if !$intDone;
-
-        if ( $blnMaze[$cSx][$cSy] ) {
-
-            # randomize directions to start
-            @cDir = &getRandomDirections();
-            do {
-                # only randomisation directions, based on the constant
-                @cDir = &getRandomDirections()
-                  if !int( $opts{rand} * rand() );
-                $blnBlocked = 1;
-
-                # loop through order of directions
-                for ( $intDir = 0; $intDir < 4; ++$intDir ) {
-
-                    # work out where this direction is
-                    $cNx = $cSx + ( $cDir[$intDir][X] * 2 );
-                    $cNy = $cSy + ( $cDir[$intDir][Y] * 2 );
-
-                    # check if the tile can be used
-                    my $isFree;
-                    if (   $cNx < ( $opts{w} - 1 )
-                        && $cNx >= 1
-                        && $cNy < ( $opts{h} - 1 )
-                        && $cNy >= 1 )
-                    {
-                        # true if it hasn't been used yet
-                        $isFree = !$blnMaze[$cNx][$cNy];
-                    }
-                    if ($isFree) {
-
-                        # create a path
-                        $blnMaze[$cNx][$cNy] = 1;
-
-                        # and the square inbetween
-                        $blnMaze[ $cSx + $cDir[$intDir][X] ]
-                          [ $cSy + $cDir[$intDir][Y] ] = 1;
-
-                        # this is now the current square
-                        $cSx        = $cNx;
-                        $cSy        = $cNy;
-                        $blnBlocked = 0;
-
-                        # increment paths created
-                        $intDone = $intDone + 1;
-                        last;
-                    }
-                }
-
-                # loop until a path was created
-            } while ( !$blnBlocked );
-        }
-    } while (
-        $intDone + 1 < ( ( ( $opts{w} - 1 ) * ( $opts{h} - 1 ) ) / 4 ) );
-
-    # create enough paths to fill the whole grid
-
-# this changes the direction to go from the current square, to the next available
-    sub getRandomDirections {
-
-        # clear the array
-        my @a = ( [ -1, 0 ], [ 1, 0 ], [ 0, -1 ], [ 0, 1 ] );
-        my @b;
-        while (@a) {
-            push @b, splice( @a, rand() * scalar(@a), 1 );
-        }
-        return @b;
-    }
-
-    $self->{map} = [];
-
-    for ( my $y = 0; $y < $opts{h}; ++$y ) {
-        for ( my $x = 0; $x < $opts{w}; ++$x ) {
-            $self->{map}->[$x][$y]
-              = ( $blnMaze[$x][$y] ? $self->{fsym} : $self->{wsym} );
-        }
-    }
-
-    for my $feature ( @{ $opts{with} } ) {
-        my ( $fx, $fy ) = $self->findrandmap('.');
-        $self->{map}->[$fx][$fy] = $feature;
-        push @{ $self->{f} }, [ $fx, $fy, 'FEATURE' ];
-    }
 }
 
 =item foreachmap (code-reference [,noborder=>1] [,border=>1])
@@ -1987,43 +1759,13 @@ sub dprint {
 
 =cut
 
-# this allows the "generate" function to work and support the old interface
-
-package Games::Roguelike::Area::Rooms;
-use base 'Games::Roguelike::Area';
-
-sub generate {
-    Games::Roguelike::Area::genmaze1(@_);
-}
-
-package Games::Roguelike::Area::Cavelike;
-use base 'Games::Roguelike::Area';
-
-sub generate {
-    Games::Roguelike::Area::genmaze2(@_);
-}
-
-package Games::Roguelike::Area::Maze;
-use base 'Games::Roguelike::Area';
-
-sub generate {
-    Games::Roguelike::Area::genmaze3(@_);
-}
-
 =head1 SEE ALSO
 
 L<Games::Roguelike::World>, L<Games::Roguelike::Mob>, L<Games::Roguelike::Console>
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 

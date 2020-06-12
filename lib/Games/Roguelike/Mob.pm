@@ -5,12 +5,9 @@ package Games::Roguelike::Mob;
 use Games::Roguelike::Utils qw(:all);
 use Games::Roguelike::Console;
 use Games::Roguelike::Area;
-use Data::Dumper;
 use Carp qw(croak confess);
 
-=head1 NAME
-
-Games::Roguelike::Mob - Roguelike mobile object
+# ABSTRACT: Roguelike mobile object
 
 =head1 SYNOPSIS
 
@@ -572,16 +569,9 @@ sub dropitem {
 
 =back
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 

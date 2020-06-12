@@ -1,23 +1,18 @@
 package Games::Roguelike::Console;
 
 use strict;
+# ABSTRACT: Platform-neutral console handling
 
 use Exporter;
 our @ISA = qw(Exporter);
 use Carp qw(croak);
 use warnings::register;
 
-our $VERSION = '0.4.' . [qw$Revision: 256 $]->[1];
-
-=head1 NAME
-
-Games::Roguelike::Console - Platform-neutral console handling
-
 =head1 SYNOPSIS
 
  use Games::Roguelike::Console;
 
- $con = Games::Roguelike::Console->new();
+ my $con = Games::Roguelike::Console->new();
  $con->attron('bold yellow');
  $con->addstr('test');
  $con->attroff();
@@ -25,7 +20,8 @@ Games::Roguelike::Console - Platform-neutral console handling
 
 =head1 DESCRIPTION
 
-Attempts to figure out which Games::Roguelike::Console subclass to instantiate in order to provide console support.
+Attempts to figure out which Games::Roguelike::Console subclass to instantiate
+in order to provide console support.
 
 =head2 METHODS
 
@@ -100,16 +96,9 @@ rectangle used for scrolling.
 
 L<Games::Roguelike::Console::ANSI>, L<Games::Roguelike::Console::Win32>, L<Games::Roguelike::Console::Curses>
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 

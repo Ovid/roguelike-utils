@@ -4,12 +4,12 @@ package Games::Roguelike::Utils;
 
 use strict;
 
+# ABSTRACT: Convenience functions and exports for roguelikes
+
 # this breaks under perl < 5.8
 # use Exporter qw(import);
 
 # Direction helpers
-
-our $VERSION = '0.4.' . [qw$Revision: 236 $]->[1];
 
 our $DIRN = 8;    # number of ways to move (don't count ".")
 our @DIRS = ( 'n', 's', 'e', 'w', 'ne', 'se', 'nw', 'sw', '.' )
@@ -118,10 +118,6 @@ sub rpad {
     return $str;
 }
 
-=head1 NAME
-
-Games::Roguelike::Utils - Convenience functions and exports for roguelikes
-
 =head1 SYNOPSIS
 
  use Games::Roguelike::Utils qw(:all);
@@ -196,16 +192,9 @@ Maps 0=>'n', 1=>'s' ... etc. as in @DIRS
 
 L<Games::Roguelike::World>
 
-=head1 AUTHOR
+=head1 ORIGINAL AUTHOR
 
 Erik Aronesty C<earonesty@cpan.org>
-
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or 
-modify it under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE file.
 
 =cut
 
