@@ -5,6 +5,7 @@
 use strict;
 use warnings;
 use Games::Roguelike::World;
+use Games::Roguelike::Area::Wilderness;
 
 package My::MOB {
     use parent 'Games::Roguelike::Mob';
@@ -29,12 +30,11 @@ my $world = Games::Roguelike::World->new(
     dispw => 60,
     disph => 20,
 );
-my $area  = Games::Roguelike::Area->new(
+my $area  = Games::Roguelike::Area::Wilderness->new(
     world => $world,
     name  => 'upland',
 );
 $area->generate(
-    'wilderness',
     { sym => 'T', color => 'green on black', weight => 2 },
     { sym => '"', color => 'white on green', weight => 2 },
     { sym => '~', color => 'white on blue',  weight => 1 },

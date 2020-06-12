@@ -13,17 +13,17 @@ version 0.6.1
     }
 
     package main;
-    use Games::Roguelike::Area;
+    use Games::Roguelike::Area::Maze;
     use Games::Roguelike::Mob;
 
     # creates a world with specified width/height & map display width/height
     my $world = My::World->new( w => 80, h => 50, dispw => 40, disph => 18 );
 
     # create a new area in this world called "1"
-    $world->area( Games::Roguelike::Area->new( name => '1' ) );
+    $world->area( Games::Roguelike::Area::Maze->new( name => '1' ) );
 
     # make a cavelike maze
-    $world->area->genmaze2();
+    $world->area->generate();
 
     # add a mobile object with symbol '@'
     my $char = Games::Roguelike::Mob->new( $world->area, sym => '@', pov => 8 );
