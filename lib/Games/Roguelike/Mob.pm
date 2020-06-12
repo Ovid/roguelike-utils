@@ -5,7 +5,6 @@ package Games::Roguelike::Mob;
 use Games::Roguelike::Utils qw(:all);
 use Games::Roguelike::Console;
 use Games::Roguelike::Area;
-use Data::Dumper;
 use Carp qw(croak confess);
 
 # ABSTRACT: Roguelike mobile object

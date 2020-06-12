@@ -67,7 +67,6 @@ use Games::Roguelike::Console;
 use Games::Roguelike::Mob;
 
 use Math::Trig;
-use Data::Dumper;
 use Carp qw(croak confess carp);
 
 our $AUTOLOAD;

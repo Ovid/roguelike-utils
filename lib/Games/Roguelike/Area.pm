@@ -42,7 +42,6 @@ use strict;
 use Games::Roguelike::Utils qw(:all);
 use Games::Roguelike::Mob;
 
-use Data::Dumper;
 use Carp qw(croak confess carp);
 
 our $OKINLINEPOV;
