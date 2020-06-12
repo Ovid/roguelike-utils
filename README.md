@@ -55,21 +55,9 @@ working mini-games.
 
 In particular, `scripts/example` is well-documented and easy to follow.
 
-# AUTHOR
+# ORIGINAL AUTHOR
 
 Erik Aronesty <earonesty@cpan.org>
-
-# MAINTAINER
-
-Curtis "Ovid" Poe <ovid@cpan.org>
-
-# LICENSE
-
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
-
-See [http://www.perl.com/perl/misc/Artistic.html](http://www.perl.com/perl/misc/Artistic.html) or the included LICENSE
-file.
 
 # AUTHOR
 
