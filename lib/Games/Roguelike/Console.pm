@@ -1,23 +1,18 @@
 package Games::Roguelike::Console;
 
 use strict;
+# ABSTRACT: Platform-neutral console handling
 
 use Exporter;
 our @ISA = qw(Exporter);
 use Carp qw(croak);
 use warnings::register;
 
-our $VERSION = '0.4.' . [qw$Revision: 256 $]->[1];
-
-=head1 NAME
-
-Games::Roguelike::Console - Platform-neutral console handling
-
 =head1 SYNOPSIS
 
  use Games::Roguelike::Console;
 
- $con = Games::Roguelike::Console->new();
+ my $con = Games::Roguelike::Console->new();
  $con->attron('bold yellow');
  $con->addstr('test');
  $con->attroff();
@@ -25,7 +20,8 @@ Games::Roguelike::Console - Platform-neutral console handling
 
 =head1 DESCRIPTION
 
-Attempts to figure out which Games::Roguelike::Console subclass to instantiate in order to provide console support.
+Attempts to figure out which Games::Roguelike::Console subclass to instantiate
+in order to provide console support.
 
 =head2 METHODS
 

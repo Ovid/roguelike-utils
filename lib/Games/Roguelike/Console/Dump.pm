@@ -1,8 +1,6 @@
 package Games::Roguelike::Console::Dump;
 
-=head1 NAME
-
-Games::Roguelike::Console::Dump - fake console that dumps to file, for testing
+# ABSTRACT: fake console that dumps to file, for testing
 
 =head1 SYNOPSIS
 
@@ -29,8 +27,6 @@ use IO::File;
 use Carp qw(cluck croak);
 use Games::Roguelike::Utils qw(:DEFAULT);
 use base 'Games::Roguelike::Console';
-
-our $VERSION = '0.4.' . [qw$Revision: 233 $]->[1];
 
 sub new {
     my $pkg = shift;

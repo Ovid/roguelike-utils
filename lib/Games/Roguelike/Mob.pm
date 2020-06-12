@@ -8,9 +8,7 @@ use Games::Roguelike::Area;
 use Data::Dumper;
 use Carp qw(croak confess);
 
-=head1 NAME
-
-Games::Roguelike::Mob - Roguelike mobile object
+# ABSTRACT: Roguelike mobile object
 
 =head1 SYNOPSIS
 

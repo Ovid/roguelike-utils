@@ -4,12 +4,12 @@ package Games::Roguelike::Utils;
 
 use strict;
 
+# ABSTRACT: Convenience functions and exports for roguelikes
+
 # this breaks under perl < 5.8
 # use Exporter qw(import);
 
 # Direction helpers
-
-our $VERSION = '0.4.' . [qw$Revision: 236 $]->[1];
 
 our $DIRN = 8;    # number of ways to move (don't count ".")
 our @DIRS = ( 'n', 's', 'e', 'w', 'ne', 'se', 'nw', 'sw', '.' )
@@ -117,10 +117,6 @@ sub rpad {
     $str .= $char x ( $len - length($str) );
     return $str;
 }
-
-=head1 NAME
-
-Games::Roguelike::Utils - Convenience functions and exports for roguelikes
 
 =head1 SYNOPSIS
 

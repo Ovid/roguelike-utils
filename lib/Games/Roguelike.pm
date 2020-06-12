@@ -1,14 +1,9 @@
 package Games::Roguelike;
 
 use strict;
-
-our $VERSION = '0.4.' . [qw$Revision: 236 $]->[1];
+# ABSTRACT: Roguelike library for Perl
 
 __END__
-
-=head1 NAME
-
-Roguelike::Utils - Roguelike Library for Perl
 
 =head1 SYNOPSIS
 

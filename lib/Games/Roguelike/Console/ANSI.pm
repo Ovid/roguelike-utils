@@ -1,8 +1,6 @@
 package Games::Roguelike::Console::ANSI;
 
-=head1 NAME
-
-Games::Roguelike::Console::ANSI - socket-friendly, object oriented curses-like support for an ansi screen buffer
+# ABSTRACT: socket-friendly, object oriented curses-like support for an ansi screen buffer
 
 =head1 SYNOPSIS
 
@@ -48,8 +46,6 @@ use POSIX;
 use Carp qw(confess croak);
 
 use base 'Games::Roguelike::Console';
-
-our $VERSION = '0.4.' . [qw$Revision: 258 $]->[1];
 
 our $KEY_ESCAPE = chr(27);
 our $KEY_NOOP   = chr(241);

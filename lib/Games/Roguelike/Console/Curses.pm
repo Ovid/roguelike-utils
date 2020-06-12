@@ -1,13 +1,14 @@
 use strict;
 
 package Games::Roguelike::Console::Curses;
+
 use Curses qw(noecho cbreak curs_set start_color);
 use base qw(Curses::Window Games::Roguelike::Console);
 use Carp qw(croak cluck);
 use POSIX;
 use warnings::register;
 
-our $VERSION = '0.4.' . [qw$Revision: 233 $]->[1];
+# ABSTRACT: Curses support for Games::Roguelike::Console
 
 my $ATTR = 0;
 

@@ -1,5 +1,7 @@
 package Games::Roguelike::Area;
 
+# ABSTRACT: Roguelike area map
+
 # puposely don't use much of the curses windowing stuff since curses doesn't port well
 # purpose of library:
 #
@@ -8,27 +10,28 @@ package Games::Roguelike::Area;
 #     assume some roguelike concepts (mobs/items)
 #     allow me to make 7-day rl's in 7-days
 
-=head1 NAME
-
-Games::Roguelike::Area - Roguelike area map
-
 =head1 SYNOPSIS
 
  package myArea;
  use base 'Games::Roguelike::Area';
 
- $a = myArea->new(w=>80,h=>50);                     # creates an area with specified width/height
- $a->generate('cavelike');                                             # make a cavelike maze
- $char = Games::Roguelike::Mob->new($a, sym=>'@');              # add a mobile object with symbol '@'
+ my $area = myArea->new(w=>80,h=>50);                 # creates an area with specified width/height
+ $area->generate('cavelike');                         # make a cavelike maze
+ my $char = Games::Roguelike::Mob->new($a, sym=>'@'); # add a mobile object with symbol '@'
 
 =head1 DESCRIPTION
 
 Library for loading or generating mazes, managing items/mobs
 
-    * assumes the user will be using overridden Games::Roguelike::Mob's as characters in the game
-    * provides a flexible load() function
-    * contains an array of 'features', which can be named, searched for and positioned
+=over 4
 
+=item * assumes the user will be using overridden Games::Roguelike::Mob's as characters in the game
+
+=item * provides a flexible load() function
+
+=item * contains an array of 'features', which can be named, searched for and positioned
+
+=back
 =head2 METHODS
 
 =over 4
@@ -45,8 +48,6 @@ use Carp qw(croak confess carp);
 our $OKINLINEPOV;
 our $AUTOLOAD;
 
-our $VERSION = '0.5.' . [qw$Revision: 259 $]->[1];
-
 BEGIN {
     eval('use Games::Roguelike::Utils::Pov_C;');
     $OKINLINEPOV = !$@;
@@ -56,28 +57,29 @@ BEGIN {
     
 Options can also all be set/get as class accessors:
 
-    world => undef,            # world this area belongs to (optional container which can "addarea")
-    name => '',             # name of this level/area (required if world is specified)
-    map => []             # double-indexed array of map symbols 
-    color => []            # double-indexed array of strings (used to color map symbols)
-    mobs => [],            # list of mobs
-    items => [],            # list of items
+    world => undef, # world this area belongs to (optional container which can "addarea")
+    name  => '',    # name of this level/area (required if world is specified)
+    map   => []     # double-indexed array of map symbols
+    color => []     # double-indexed array of strings (used to color map symbols)
+    mobs  => [],    # list of mobs
+    items => [],    # list of items
 
- # These will default to the world defaults, if world is set
+These will default to the world defaults, if world is set
 
-        w=>80, h=>40,            # width/height of this area
-        debugmap => 0,             # turn on map coordinate display
-    memcolor => 'gray',        # color drawn when an area is not in sight
+    w        => 80,     # width of this area
+    h        => 40,     # height of this area
+    debugmap => 0,      # turn on map coordinate display
+    memcolor => 'gray', # color drawn when an area is not in sight
 
- # These vars, or the world defaults (if a world is defined)
- # are used by map-making, pathfinding and field-of view, rather than using hooks
- # specifically because function calling seems to slow things down
+These vars, or the world defaults (if a world is defined) are used by
+map-making, pathfinding and field-of view, rather than using hooks
+specifically because function calling seems to slow things down
 
-        wsym => '#',             # default wall symbol
-        fsym => '.',             # default floor symbol
-        dsym => '+',             # default door symbol
-        noview => '#+',         # list of symbols that block view
-        nomove => '#',             # list of symbols that block movement    
+    wsym   => '#',      # default wall symbol
+    fsym   => '.',      # default floor symbol
+    dsym   => '+',      # default door symbol
+    noview => '#+',     # list of symbols that block view
+    nomove => '#',      # list of symbols that block movement
     
 =cut
 
@@ -1990,6 +1992,7 @@ sub dprint {
 # this allows the "generate" function to work and support the old interface
 
 package Games::Roguelike::Area::Rooms;
+
 use base 'Games::Roguelike::Area';
 
 sub generate {
@@ -1997,6 +2000,7 @@ sub generate {
 }
 
 package Games::Roguelike::Area::Cavelike;
+
 use base 'Games::Roguelike::Area';
 
 sub generate {
@@ -2004,6 +2008,7 @@ sub generate {
 }
 
 package Games::Roguelike::Area::Maze;
+
 use base 'Games::Roguelike::Area';
 
 sub generate {
