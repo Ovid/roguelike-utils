@@ -1,6 +1,10 @@
 # NAME
 
-Roguelike::Utils - Roguelike Library for Perl
+Games::Roguelike - Roguelike library for Perl
+
+# VERSION
+
+version 0.6.0
 
 # SYNOPSIS
 
@@ -41,11 +45,11 @@ Roguelike::Utils - Roguelike Library for Perl
 Library for pulling together field of view, character handling and map drawing
 code.
 
-* ::World is the main "world" object
-* uses the ::Console library to draw the map
-* assumes the user will be using overridden ::Mob's as characters in the game
+- ::World is the main "world" object
+- uses the ::Console library to draw the map
+- assumes the user will be using overridden ::Mob's as characters in the game
 
-Please also see the examples and test scripts located in the "scripts"
+Please also see the examples and test scripts located in the `scripts`
 directory included with this distribution.  Some of the examples are fully
 working mini-games.
 
@@ -55,11 +59,25 @@ In particular, `scripts/example` is well-documented and easy to follow.
 
 Erik Aronesty <earonesty@cpan.org>
 
+# MAINTAINER
+
+Curtis "Ovid" Poe <ovid@cpan.org>
+
 # LICENSE
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
-See L<http://www.perl.com/perl/misc/Artistic.html> or the included LICENSE
+See [http://www.perl.com/perl/misc/Artistic.html](http://www.perl.com/perl/misc/Artistic.html) or the included LICENSE
 file.
 
+# AUTHOR
+
+Curtis "Ovid" Poe <ovid@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2020 by Curtis "Ovid" Poe.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
